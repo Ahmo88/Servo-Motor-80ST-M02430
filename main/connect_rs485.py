@@ -2,24 +2,22 @@
 import serial
 from pymodbus.client.serial import ModbusSerialClient as ModbusClient
 
+
 class RS485Connection():
     def __init__(self) -> None:
-        """ self.port = port
-        self.method = method
-        self.baudrate = baudrate """
+        pass
 
-    def connectRS485(method:str, port:str, baudrate:int):
-        
+    def connectRS485(method: str, port: str, baudrate: int):
+
         try:
             # Create a Modbus client
             client = ModbusClient(method=method, port=port,
-                                stopbits=1, bytesize=8, parity='N', baudrate=baudrate)
+                                  stopbits=1, bytesize=8, parity='N', baudrate=baudrate)
 
             # Try to establish a connection
             if client.connect():
                 print("Connected to the Modbus device")
                 return client
-
 
             else:
                 print("Failed to connect to the Modbus device")

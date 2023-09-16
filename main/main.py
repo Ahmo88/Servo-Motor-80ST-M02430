@@ -6,6 +6,7 @@ from connect_rs485 import RS485Connection
 
 client = RS485Connection.connectRS485('rtu', 'COM3', 9600)
 
+
 def servo_on():
     # Implement your Modbus write operations here
     client.write_register(33, 1)
@@ -23,11 +24,13 @@ def servo_on():
 
 # Function to turn off the servo
 
+
 def servo_off():
     # Implement your Modbus write operations here
     client.write_register(3, 0)
 
     pass
+
 
 # Test the servo control functions
 servo_on()
@@ -36,5 +39,4 @@ servo_on()
 # servo_off() #turn of servo
 
 # Close the Modbus client and serial port when done
-#client.close()
-
+# client.close()
