@@ -1,46 +1,40 @@
 # NOTE: Code is not tested yet it is just sample from gptchat i have to check and continue.
+import serial
+from pymodbus.client.serial import ModbusSerialClient as ModbusClient
 
-from pymodbus.client.serial import ModbusSerialClient
+from connect_rs485 import RS485Connection
 
+client = RS485Connection.connectRS485('rtu', 'COM3', 9600)
 
-# Configure the Modbus RTU client
-client = ModbusSerialClient(
-    #method='rtu', port='/dev/ttyUSB0', baudrate=9600, parity='N', stopbits=1, bytesize=8, timeout=1 # for linux
-    method='rtu', port='COM1', baudrate=9600, parity='N', stopbits=1, bytesize=8, timeout=1  # connection method for windows
-)
-
-# Connect to the RS485 port
-if not client.connect():
-    print("Failed to connect to the RS485 port")
-    exit()
-
-# Function to turn the servo on
 def servo_on():
-    try:
-        # Write single registers to turn on the servo
-        client.write_registers(33, [1], unit=2)
-        client.write_registers(34, [4], unit=2)
-        client.write_registers(35, [2], unit=2)
-        client.write_registers(3, [1], unit=2)
-        client.write_registers(40, [10000], unit=2)
-        client.write_registers(41, [10000], unit=2)
-        print("Servo turned on")
-    except Exception as e:
-        print(f"Error turning on servo: {str(e)}")
+    # Implement your Modbus write operations here
+    client.write_register(33, 1)
+    # delay(100) NOTE: CHECK DO WE NEED  time.sleap 100ms
+    client.write_register(34, 4)
+    # delay(100) NOTE: CHECK DO WE NEED  time.sleap 100ms
+    client.write_register(35, 2)
+    # delay(100) NOTE: CHECK DO WE NEED  time.sleap 100ms
+    client.write_register(3, 1)
+    # delay(100) NOTE: CHECK DO WE NEED  time.sleap 100ms
+    client.write_register(40, 10000)
+    # delay(100) NOTE: CHECK DO WE NEED  time.sleap 100ms
+    client.write_register(41, 10000)
+    # delay(100) NOTE: CHECK DO WE NEED  time.sleap 100ms
 
-# Function to turn the servo off
+# Function to turn off the servo
+
 def servo_off():
-    try:
-        # Write single registers to turn off the servo
-        client.write_registers(3, [0], unit=2)
-        print("Servo turned off")
-    except Exception as e:
-        print(f"Error turning off servo: {str(e)}")
+    # Implement your Modbus write operations here
+    client.write_register(3, 0)
 
-# Call the functions to control the servo
+    pass
+
+# Test the servo control functions
 servo_on()
-# You can add a delay or other code here if needed
-servo_off()
+# Add delay or other operations here if needed
 
-# Close the Modbus connection
-client.close()
+# servo_off() #turn of servo
+
+# Close the Modbus client and serial port when done
+#client.close()
+
