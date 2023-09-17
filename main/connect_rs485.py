@@ -12,7 +12,7 @@ class RS485Connection():
         try:
             # Create a Modbus client
             client = ModbusClient(method=method, port=port,
-                                  stopbits=1, bytesize=8, parity='N', baudrate=baudrate)
+                                  stopbits=2, bytesize=8, parity='N', baudrate=baudrate)
 
             # Try to establish a connection
             if client.connect():
