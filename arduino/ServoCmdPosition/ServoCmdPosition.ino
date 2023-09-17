@@ -17,7 +17,6 @@ int lampa = 13;
 boolean prosloStanje = false;
 boolean limitProsloStanje = true;
 
-
 // instantiate ModbusMaster object
 ModbusMaster node;
 #include <CmdMessenger.h>
@@ -66,8 +65,7 @@ void attachCommandCallbacks()
   cmdMessenger.attach(goreStani, staniGore);
   cmdMessenger.attach(dole, idiDole);
   cmdMessenger.attach(doleStani, staniDole);
- cmdMessenger.attach(homeOn,homeStaniKreni);
-
+  cmdMessenger.attach(homeOn, homeStaniKreni);
 }
 
 void setup()
@@ -84,16 +82,15 @@ void setup()
   attachCommandCallbacks();
 
   // communicate with Modbus slave ID 2 over Serial (port 0)
-  node.begin(2, Serial1);  // Ime motora
-
+  node.begin(2, Serial1); // Ime motora
 }
 void loop()
 {
-   
+
   cmdMessenger.feedinSerialData();
   delay(50);
 
-  if ( digitalRead (buttonGore) ==  LOW  )  // za dugme
+  if (digitalRead(buttonGore) == LOW) // za dugme
   {
     prosloStanje = true;
     result = node.writeSingleRegister(120, -200);
@@ -101,7 +98,6 @@ void loop()
     result = node.writeSingleRegister(71, 4095);
     delay(50);
     result = node.writeSingleRegister(71, 3071);
- 
   }
   else if (prosloStanje == true)
   {
@@ -110,29 +106,26 @@ void loop()
 
     result = node.writeSingleRegister(71, 2047);
     prosloStanje = false;
+  }
 
-  }   
+  if (digitalRead(limitPrekidac) == HIGH)
+  {
+    if (limitProsloStanje = true)
 
- if (digitalRead (limitPrekidac)== HIGH) 
-{
-  if (limitProsloStanje = true)
+    {
 
-{
-  
-  result = node.writeSingleRegister(71, 2047);
-  delay(50);
+      result = node.writeSingleRegister(71, 2047);
+      delay(50);
 
- limitProsloStanje = false;
-}
-  else if
-  (limitProsloStanje == false)
-   {
-    homeStaniKreni();
-    
+      limitProsloStanje = false;
     }
-  } 
-   
-  if ( digitalRead (buttonPin) == LOW )
+    else if (limitProsloStanje == false)
+    {
+      homeStaniKreni();
+    }
+  }
+
+  if (digitalRead(buttonPin) == LOW)
   {
     if (jednom == true)
     {
@@ -150,8 +143,8 @@ void loop()
   if (result == node.ku8MBSuccess)
   {
 
-    j = node.getResponseBuffer(0); //low bit
-    i = node.getResponseBuffer(1); //high bit
+    j = node.getResponseBuffer(0); // low bit
+    i = node.getResponseBuffer(1); // high bit
   }
   cmdMessenger.sendCmd(trenutnaPozicija, i);
   cmdMessenger.sendCmd(trenutnaPozicija2, j);
@@ -173,7 +166,6 @@ void ugasiServo()
   //  result = node.writeSingleRegister(8, 300); //torque naprijed 300
   // delay(50);
   //  result = node.writeSingleRegister(9, -300);//torque nazad 300
- 
 }
 
 void brzinaPrva()
@@ -205,7 +197,7 @@ void podesiBrzinu()
   result = node.writeSingleRegister(128, a);
 }
 
-void pozicijaPrva()  // manji broj krugova registar 120
+void pozicijaPrva() // manji broj krugova registar 120
 {
   cmdMessenger.feedinSerialData();
   delay(50);
@@ -215,7 +207,7 @@ void pozicijaPrva()  // manji broj krugova registar 120
   jednom = true;
 }
 
-void pozicijaDruga()  // veci broj krugova registar 121
+void pozicijaDruga() // veci broj krugova registar 121
 {
   cmdMessenger.feedinSerialData();
   delay(50);
@@ -227,30 +219,28 @@ void pozicijaDruga()  // veci broj krugova registar 121
 void homeKreni()
 
 {
- 
+
   cmdMessenger.feedinSerialData();
   delay(50);
-  //result = node.writeSingleRegister(9, -10);
- // delay(50);
+  // result = node.writeSingleRegister(9, -10);
+  // delay(50);
   result = node.writeSingleRegister(120, -100);
   delay(50);
   result = node.writeSingleRegister(71, 4095);
   delay(50);
   result = node.writeSingleRegister(71, 3071);
- 
 }
- void homeStaniKreni()
- {
- 
+void homeStaniKreni()
+{
+
   result = node.writeSingleRegister(120, 10);
   delay(500);
   result = node.writeSingleRegister(71, 4095);
   delay(50);
-  result = node.writeSingleRegister(71, 3071);  
-  delay (2000);
+  result = node.writeSingleRegister(71, 3071);
+  delay(2000);
   limitProsloStanje = true;
-
- }
+}
 void triger()
 {
   cmdMessenger.feedinSerialData();
@@ -284,29 +274,27 @@ void vrijednost()
 void idiGore() // pretvara void u loop cita ga stalno idiGore();
 
 {
- 
- cmdMessenger.feedinSerialData();
- delay(50);
- result = node.writeSingleRegister(120, -100);
- delay(50);
-  result = node.writeSingleRegister(71, 4095);
- delay(50);
-  result = node.writeSingleRegister(71, 3071);
 
+  cmdMessenger.feedinSerialData();
+  delay(50);
+  result = node.writeSingleRegister(120, -100);
+  delay(50);
+  result = node.writeSingleRegister(71, 4095);
+  delay(50);
+  result = node.writeSingleRegister(71, 3071);
 }
 
 void staniGore() // pretvara void u loop cita ga stalno ako se stavi u void lop  idiGore();
 
 {
   cmdMessenger.feedinSerialData();
-  delay(50); 
+  delay(50);
   result = node.writeSingleRegister(71, 2047);
-  
 }
-void idiDole() 
+void idiDole()
 
 {
-  
+
   cmdMessenger.feedinSerialData();
   delay(50);
   result = node.writeSingleRegister(120, 100);
@@ -316,13 +304,11 @@ void idiDole()
   result = node.writeSingleRegister(71, 3071);
 }
 
-void staniDole() 
+void staniDole()
 
 {
   cmdMessenger.feedinSerialData();
- delay(50);
+  delay(50);
 
   result = node.writeSingleRegister(71, 2047);
-
 }
-
