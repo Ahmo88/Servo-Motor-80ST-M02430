@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+from main_app import Servo
 
 root = tk.Tk()
-root.title('Azure')
+root.title('Servo controlling template')
 
 window_height = 530
 window_width = 800
@@ -16,7 +17,7 @@ y_cordinate = int((screen_height/2) - (window_height/2))
 root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
 
 style = ttk.Style(root)
-root.tk.call('source', r'C:\Users\tarev\OneDrive\Asiakirjat\GitHub\Servo-Motor-80ST-M02430\Azure-ttk-theme-main\azure dark\azure dark.tcl')
+root.tk.call('source', r'C:\Users\tarev\OneDrive\Asiakirjat\GitHub\Servo-Motor-80ST-M02430\main\azure dark.tcl')
 style.theme_use('azure')
 
 options = ['', 'OptionMenu', 'Value 1', 'Value 2']
@@ -106,9 +107,17 @@ scale.place(x=80, y=430)
 progress = ttk.Progressbar(root, value=0, variable=g, mode='determinate')
 progress.place(x=80, y=480)
 
-switch = ttk.Checkbutton(root, text='Toggle switch', style='Switch', variable=h, offvalue=0, onvalue=1)
+def toggle_switch():
+    """ this method will turn on/off Servo motor """
+    if h.get() == 1:
+        Servo.servo_on(self=None)  # Call function when switch is ON
+        switch.config(text='Servo ON')  # Update the text when the switch is ON
+    else:
+        Servo.servo_off(self=None)  # Call function when switch is OFF
+        switch.config(text='Servo OFF')  # Update the text when the switch is ON
+        
+switch = ttk.Checkbutton(root, text='Servo state', style='Switch', variable=h, offvalue=0, onvalue=1, command=toggle_switch)
 switch.place(x=250, y=470)
-switch.invoke()
 
 size = ttk.Sizegrip(root)
 size.place(x=780, y=510)
