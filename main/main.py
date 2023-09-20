@@ -33,34 +33,25 @@ def rotateShaft():
 
 def readRegister():
 
-    try:
-        # Try to establish a connection
-        if client.connect():
-            print("Connected to the Modbus device")
+    # Read holding registers
+    response = client.read_holding_registers(
+        address=387, count=2, unit=slave_address)
 
-            # Specify the Modbus slave address
-            slave_address = 2  # Replace with the correct slave address for your device
+    if response.isError():
+        print("Modbus error:", response)
+    else:
+        # Get the data from the response
+        register_values = response.registers
+        low_byte = register_values[0]
+        high_byte = register_values[1]
 
-            # Read holding registers
-            response = client.read_holding_registers(
-                address=387, count=2, unit=slave_address)
-
-            if response.isError():
-                print("Modbus error:", response)
-            else:
-                # Get the data from the response
-                register_values = response.registers
-                low_byte = register_values[0]
-                high_byte = register_values[1]
-
-                # Combine low and high bytes to form a 16-bit value
-                value = (high_byte << 8) | low_byte
-                print("Register Value:", value)
-
-    except Exception as e:
-        print("An error occurred:", str(e))
+        # Combine low and high bytes to form a 16-bit value
+        value = (high_byte << 8) | low_byte
+        print("Register Value:", value)
 
 
 # servo_off()
-servo_on()
+#servo_on()
 rotateShaft()
+readRegister()
+
