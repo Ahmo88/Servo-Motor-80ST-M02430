@@ -1,1 +1,1 @@
-numpy==1.26.0
+numpy==1.26.0 # NumPy, short for "Numerical Python,"  is a fundamental package in Python for numerical and scientific computing
