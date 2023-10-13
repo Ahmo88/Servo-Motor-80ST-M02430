@@ -3,6 +3,10 @@
     This code project will controll "Servo-Motor-80ST-M02430" driver/servo motor
     using python GUI app and USB-RS485 for communication with Servo Driver
 
+# Git project config
+    git config --local user.name "Ahmo Tokalic"
+    git config --local user.email "tarevo_1988@hotmail.com"
+
 # Python version
     - 3.11.5    
 
