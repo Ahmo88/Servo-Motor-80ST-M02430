@@ -2,6 +2,7 @@ from pymodbus.client.serial import ModbusSerialClient as ModbusClient
 from connect_rs485 import RS485Connection
 import time
 from logger_config import logging
+from pymodbus.exceptions import ModbusIOException
 
 # rtu is Modbus RTU communication mode
 client = RS485Connection.connectRS485('rtu', 'COM7', 19200)
@@ -42,29 +43,29 @@ class Servo():
         else:
             logging.warning('USB-RS485 adapter is not connected. Please insert USB-RS485 adapter ')    
 
+    # NOTE: JUST TEST
+    time.sleep(1)
+    rotateShaft(self=None)
 
     def readRegister(self):
 
-        # Read holding registers
-        response = client.read_holding_registers(
-            address=387, count=2, unit=slave_address)
+        try:
+            # Read the holding registers starting from address 387, for a count of 2 registers
+            result = client.read_holding_registers(387, 2, slave_address)  # Replace 'unit' with your device's unit ID
 
-        if response.isError():
-            print("Modbus error:", response)
-        else:
-            # Get the data from the response
-            register_values = response.registers
-            low_byte = register_values[0]
-            high_byte = register_values[1]
-
-            # Combine low and high bytes to form a 16-bit value
-            value = (high_byte << 8) | low_byte
-            print("Register Value:", value)
-
-
-        # servo_off()
-        self.servo_on()
-        self.rotateShaft()
-        # readRegister()
+            # Check if the request was successful
+            if result.isError():
+                print(f"Failed to read the registers: {result}")
+            else:
+                # Get the data from the response
+                j = result.registers[0]  # low bit
+                i = result.registers[1]  # high bit
+                print("Low bit:", j)
+                print("High bit:", i)
+        except ModbusIOException as e:
+            print(f"Modbus communication error: {e}")
+  
         
-#servo = Servo.servo_off(self=None)        
+servo = Servo.servo_on(self=None) 
+
+servo = Servo.readRegister(self=None)        
