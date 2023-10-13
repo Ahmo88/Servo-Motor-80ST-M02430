@@ -1,5 +1,4 @@
 # NOTE: Code is not tested yet it is just sample from gptchat i have to check and continue.
-import serial
 from pymodbus.client.serial import ModbusSerialClient as ModbusClient
 
 

@@ -4,7 +4,7 @@ import time
 from logger_config import logging
 
 # rtu is Modbus RTU communication mode
-client = RS485Connection.connectRS485('rtu', 'COM3', 19200)
+client = RS485Connection.connectRS485('rtu', 'COM7', 19200)
 
 # communicate with Modbus slave ID 2 over Serial (port 0)
 slave_address = 2
