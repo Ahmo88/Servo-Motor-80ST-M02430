@@ -3,15 +3,17 @@ from connect_rs485 import RS485Connection
 import time
 from logger_config import logging
 from pymodbus.exceptions import ModbusIOException
+from write_register import ConvertNumber
 
 # rtu is Modbus RTU communication mode
 client = RS485Connection.connectRS485('rtu', 'COM7', 19200)
 
 # communicate with Modbus slave ID 2 over Serial (port 0)
-slave_address = 2
+slave_address = 2 # Servo is slave and id in manual is 2
 
 class Servo():
     """ This is main class for controlling Servo motor using USB-RS485 adapter and Modbus RTU """
+    
     def __init__(self, name, age):
       self.name = name
       self.age = age
@@ -30,22 +32,21 @@ class Servo():
 
 
     def rotateShaft(self):
-
         if client:
-            client.write_register(128, 50, slave_address)  # set speed
-            time.sleep(0.2)
-            # amout of rotations (if is 1 then is 1 full turn)
-            client.write_register(120, 1, slave_address)
-            time.sleep(0.1)
+            client.write_register(128, 100, slave_address)  # set speed
+            
+            # Pn120=12，Pn121=5000 Example: the encoder 2500 line, shaft will make 12.5 turns
+            client.write_register(120, ConvertNumber.binary_pay_load(2), slave_address) # full turns (if is 1 then will turn shaft 1 times "360" degre)
+            client.write_register(121, ConvertNumber.binary_pay_load(5000), slave_address) # partial turns (if is 5000 it will turn shaft half "180" degre, if is 2500 then "90" degree)
+
+            client.write_register(8, ConvertNumber.binary_pay_load(300), slave_address) # shaft torque CCW (0 to 300 max torque Newton-meters (N·m) or ounce-inches (oz·in))
+            client.write_register(9, ConvertNumber.binary_pay_load(-300), slave_address) # shaft torque CW (-300 to 0 max torque Newton-meters (N·m) or ounce-inches (oz·in))
+
             client.write_register(71, 4095, slave_address)
-            time.sleep(0.1)
             client.write_register(71, 3071, slave_address)
+
         else:
             logging.warning('USB-RS485 adapter is not connected. Please insert USB-RS485 adapter ')    
-
-    # NOTE: JUST TEST
-    time.sleep(1)
-    rotateShaft(self=None)
 
     def readRegister(self):
 
@@ -67,5 +68,6 @@ class Servo():
   
         
 servo = Servo.servo_on(self=None) 
+servo = Servo.rotateShaft(self=None)
 
 servo = Servo.readRegister(self=None)        
