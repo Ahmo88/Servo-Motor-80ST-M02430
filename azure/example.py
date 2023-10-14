@@ -21,7 +21,7 @@ center_screen()
 
 
 style = ttk.Style(root)
-root.tk.call('source', r'C:\Users\tarev\OneDrive\Asiakirjat\GitHub\Servo-Motor-80ST-M02430\main\azure\azure.tcl')
+root.tk.call('source', r'C:\Users\tarev\OneDrive\Asiakirjat\GitHub\Servo-Motor-80ST-M02430\azure\azure.tcl')
 style.theme_use('azure')
 
 options = ['', 'OptionMenu', 'Value 1', 'Value 2']
