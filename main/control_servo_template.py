@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from main_app import Servo
+from logger_config import logging
 
 root = tk.Tk()
 root.title('Servo controlling template')
@@ -44,9 +45,18 @@ spin.insert(0, 'Spinbox')
 
 
 def rotate_chaft():
-    Servo.rotate_shaft(full_turn = int(full_turn_entry.get()), partial_turn = int(partial_turn_entry.get()))
+    """ this method will get values from input fields and then 
+        will rotate servo shaft 
+    """
+    try:
+        Servo.rotate_shaft(full_turn = int(full_turn_entry.get()), partial_turn = int(partial_turn_entry.get()))
+        
+    except Exception as e:
+        # Code to handle the exception
+        logging.warning('Wrong input type for servo position')
+        logging.warning(f"An error occurred: {e}")
+        
     
-
 button = ttk.Button(root, text='Rotate shaft', command=rotate_chaft)
 button.place(x=250, y=320)
 
