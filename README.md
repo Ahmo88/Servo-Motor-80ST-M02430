@@ -3,6 +3,13 @@
     This code project will controll "Servo-Motor-80ST-M02430" driver/servo motor
     using python GUI app and USB-RS485 for communication with Servo Driver
 
+# Git project config
+    git config --local user.name "Ahmo Tokalic"
+    git config --local user.email "tarevo_1988@hotmail.com"
+
+# Python version
+    - 3.11.5    
+
 # How to setup:
     - pip install pyModbus
     - pip install pyserial  
@@ -30,7 +37,7 @@
     - All this can be faunded in V4.0 Servo driver Technical Manual in project
         Pn001 must be 4 if we use Servo motor CNCSERVO CONTROL "80ST-M02430"
         Pn064 must be 2 for rs485 communication, or 1 if we use rs232 communication
-        Pn066 can be 19200, remember to change in Windows and python code same baudrate!!
+        Pn066 can be 2 for 19200 baudrate, remember to change in Windows and python code same baudrate!!
         Pn067 must be 6 for 8 , N , 2 ( Modbus , RTU ) communication function 
         Pn069 4095 Input function control mode select register 2   
         Pn071 4095 Input function logic state set register 2
