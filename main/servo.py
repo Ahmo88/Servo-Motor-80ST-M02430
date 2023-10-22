@@ -1,8 +1,5 @@
 from logger_config import logging
-from pymodbus.exceptions import ModbusIOException
 from write_register import ConvertNumber
-import threading # is for separate thread, so we can run code separate from main code. This prevent conflict
-# for example if we need run some loop separate from this program, so main program can be used withot interference  
 
 class Servo():
     """ This is main class for controlling Servo motor using USB-RS485 adapter and Modbus RTU 
@@ -60,40 +57,4 @@ class Servo():
             
             self.client.write_register(8, ConvertNumber.binary_pay_load(300), self.slave_address) # shaft torque CCW (0 to 300 max torque Newton-meters (N·m) or ounce-inches (oz·in))
             self.client.write_register(9, ConvertNumber.binary_pay_load(-300), self.slave_address) # shaft torque CW (-300 to 0 max torque Newton-meters (N·m) or ounce-inches (oz·in))    
-
-
-    def read_encoder_registers(self):
-        """ method read encoder register/ encoder position """
-
-        try:       
-            # Read the holding registers starting from address 387, for a count of 2 registers
-            result = self.client.read_holding_registers(387, 2, self.slave_address)
-
-            # Check if the request was successful
-            if result.isError():
-                print(f"Failed to read the registers: {result}")
-            else:
-                # Get the data from the response/result
-                i = result.registers[1]  # high bit
-                j = result.registers[0]  # low bit
-
-                return i
-
-        except ModbusIOException as e:
-            print(f"Modbus communication error: {e}")            
-
-    def _read_encoder_continuously(self):
-        """ loop for reading encoder """
-        
-        while True:
-            encoder_position = self.read_encoder_registers()
-            print(encoder_position)     
-
-    def start_reading_encoder(self):
-            """ method called from main.py template
-                it will start Thread, and read encoder           
-            """
-            # This method will start a separate thread to read the encoder registers continuously
-            self.encoder_thread = threading.Thread(target=self._read_encoder_continuously)
-            self.encoder_thread.daemon = True
-            self.encoder_thread.start()                   
+                 

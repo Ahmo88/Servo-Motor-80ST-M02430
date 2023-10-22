@@ -41,3 +41,21 @@
         Pn067 must be 6 for 8 , N , 2 ( Modbus , RTU ) communication function 
         Pn069 4095 Input function control mode select register 2   
         Pn071 4095 Input function logic state set register 2
+
+# Shaft rotation scale:
+    - Driver use register 120 and 121 for Servo shaft rotation
+        register 120, full turns (if is 1 then will turn shaft 1 times "360" degre) 
+        register 121, partial turns (if is 5000 it will turn shaft half "180" degre, if is 2500 then "90" degree)
+
+    - Driver use register 387 for encoder position and it contains 2 registers registers[0] and registers[1]
+        registers[1] is for hight bit (full turns)
+        registers[0] is for low bit (partial turns)
+                 
+    So we use scale for "partial turns" registers[0]. In code if we need to print value of 0.5 then we 
+    scale encoder rough value registers[0] for example 5000 * 0.0001 == 0.5 turns (half turn). 
+    In this case we will se that encoder position is 0.5  
+
+    It is same for writing 121 register, only we need to scale with 10000.
+    For example in input we write "0.5 value" but in code scale (0.5 input value * 10000) so we get 5000 (180 degree == half turns)
+    
+    So for encoder scale register 387 is registers[0] * 0.0001, and for partial 121 scale * 10000
