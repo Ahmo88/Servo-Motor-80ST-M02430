@@ -124,6 +124,8 @@ class MainProgram():
 
 
         def split_values():
+            
+            # TODO: # TRY TO ORGANIZE THIS FILE AND ADD COMMENTS TO ALL METHODS
 
             global full_turns  # Use the global keyword to work with the outer-scope variable
             global partial_turns  # Use the global keyword to work with the outer-scope variable
